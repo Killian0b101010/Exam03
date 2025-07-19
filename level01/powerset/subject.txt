@@ -1,0 +1,52 @@
+📜 Énoncé :
+
+Nom de l'exercice : powerset
+Fichiers attendus : *.c *.h
+Fonctions autorisées : atoi, printf, malloc, calloc, realloc, free
+🔥 Objectif :
+
+Tu dois écrire un programme qui prend en arguments :
+
+    Un entier n
+
+    Suivi d’un ensemble d'entiers
+
+Le programme doit afficher tous les sous-ensembles de cet ensemble dont la somme des éléments est exactement n.
+⚠️ En cas d’erreur de malloc, le programme doit quitter avec le code 1.
+
+Aucun test ne portera sur des entrées invalides.
+
+💡 Indice :
+L’ensemble vide est un sous-ensemble de n’importe quel ensemble.
+📝 Exemples :
+
+$> ./powerset 3 1 0 2 4 5 3 | cat -e
+3$
+0 3$
+1 2$
+1 0 2$
+
+$> ./powerset 12 5 2 1 8 4 3 7 11 | cat -e
+8 4$
+1 11$
+1 4 7$
+2 3 7$
+5 4 3$
+5 7$
+5 2 1 4$
+
+$> ./powerset 7 3 8 2 | cat -e
+$
+
+$> ./powerset 0 1 -1 | cat -e
+1 -1$
+
+📝 Règles sur l’ordre :
+
+    L’ordre des lignes affichées n’est pas important
+
+    Mais l’ordre des éléments dans un sous-ensemble doit respecter l’ordre des arguments d’entrée
+
+    Aucun doublon n’est autorisé
+
+        Exemple interdit : 2 1 si 1 2 a déjà été affiché
