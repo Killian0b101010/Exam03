@@ -6,7 +6,7 @@
 /*   By: kiteixei <kiteixei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 00:07:20 by kiteixei          #+#    #+#             */
-/*   Updated: 2025/07/19 00:35:12 by kiteixei         ###   ########.fr       */
+/*   Updated: 2025/07/19 21:16:33 by kiteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	match_space(FILE *f)
 {
 	int	i;
 
-	i = getc(f);
+	i = fgetc(f);
 	while (i != EOF)
 	{
 		if (!isspace(i))
@@ -27,7 +27,7 @@ int	match_space(FILE *f)
 			ungetc(i, f);
 			break ;
 		}
-		i = getc(f);
+		i = fgetc(f);
 	}
 	return (0);
 }
@@ -36,13 +36,12 @@ int	match_char(FILE *f, char c)
 {
 	int	match;
 
-	match = getc(f);
+	match = fgetc(f);
 	if (match == EOF)
 		return (-1);
 	if (match == c)
 		return (1);
-	else
-		ungetc(match, f);
+	ungetc(match, f);
 	return (0);
 }
 
@@ -51,7 +50,7 @@ int	scan_char(FILE *f, va_list ap)
 	char	*ptr;
 	int		i;
 
-	i = getc(f);
+	i = fgetc(f);
 	ptr = va_arg(ap, char *);
 	if (i == EOF)
 		return (-1);
@@ -62,31 +61,28 @@ int	scan_char(FILE *f, va_list ap)
 int	scan_int(FILE *f, va_list ap)
 {
 	int	i;
+	int	num;
+	int	sign;
 	int	is_number;
 	int	*ptr;
-	int	sign;
-	int	num;
 
+	i = fgetc(f);
 	num = 0;
 	sign = 1;
 	is_number = 0;
 	ptr = va_arg(ap, int *);
-	i = getc(f);
-	// gestion signe
 	if (i == '-' || i == '+')
 	{
 		if (i == '-')
 			sign = -1;
 		i = fgetc(f);
 	}
-	// Affichage des nombres
-	while (isdigit(i) && i != EOF)
+	while (i != EOF && isdigit(i))
 	{
 		num = num * 10 + (i - '0');
 		is_number = 1;
 		i = fgetc(f);
 	}
-	// gestion d'erreur
 	if (!is_number)
 		return (-1);
 	if (i != EOF)
@@ -98,17 +94,15 @@ int	scan_int(FILE *f, va_list ap)
 int	scan_string(FILE *f, va_list ap)
 {
 	int		get;
-	char	*ptr;
 	int		count;
+	char	*ptr;
 
-	get = 0;
 	count = 0;
 	ptr = va_arg(ap, char *);
 	get = fgetc(f);
-	while (get != EOF && (!isspace(get)))
+	while (get != EOF && !isspace(get))
 	{
-		ptr[count] = (char)get;
-		count++;
+		ptr[count++] = (char)get;
 		get = fgetc(f);
 	}
 	if (get != EOF)
@@ -182,34 +176,18 @@ int	ft_scanf(const char *format, ...)
 	va_end(ap);
 	return (ret);
 }
-void	run_test(int use_ft)
+
+#include <stdio.h>
+
+int	ft_scanf(const char *format, ...);
+
+int	main(void)
 {
 	int		nb;
-	char	str[100];
 	char	c;
-	int		ret;
+	char	str[100];
 
-	if (use_ft)
-	{
-		ret = ft_scanf("%d %s %c", &nb, str, &c);
-		printf("%d %d %s %c\n", ret, nb, str, c);
-	}
-	else
-	{
-		ret = scanf("%d %s %c", &nb, str, &c);
-		printf("%d %d %s %c\n", ret, nb, str, c);
-	}
-}
-
-int	main(int ac, char **av)
-{
-	if (ac != 2)
-		return (1);
-	if (strcmp(av[1], "ft") == 0)
-		run_test(1);
-	else if (strcmp(av[1], "scanf") == 0)
-		run_test(0);
-	else
-		printf("Usage: ./scanf_test [scanf|ft]\n");
+	ft_scanf("%d %c %s", &nb, &c, str);
+	// printf("%d\n%c\n%s\n", nb, c, str);
 	return (0);
 }
