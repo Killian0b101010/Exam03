@@ -1,54 +1,70 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ndames.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kiteixei <kiteixei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 20:39:46 by kiteixei          #+#    #+#             */
+/*   Updated: 2025/07/23 22:16:22 by kiteixei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+//Moulinette Certified 21/07/25.
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
-int	is_safe(int *positions, int current_col, int current_row)
+int	is_safe(int *position, int current_row, int current_col)
 {
-	int	prev_row;
+	int	row_prev;
 
-	for (int prev_col = 0; prev_col < current_col; prev_col++)
+	for (int col_prev = 0; col_prev < current_col; col_prev++)
 	{
-		prev_row = positions[prev_col];
-		if (prev_row == current_row || prev_row - prev_col == current_row
-			- current_col || prev_row + prev_col == current_row + current_col)
+		row_prev = position[col_prev];
+		if (current_row == row_prev || current_row + current_col == row_prev
+			+ col_prev || current_row - current_col == row_prev - col_prev)
 			return (0);
 	}
 	return (1);
 }
-
-void	solve(int *positions, int col, int n)
+void	solve(int *position, int col, int i)
 {
-	if (col == n)
+	if (i == col)
 	{
-		for (int i = 0; i < n; i++)
+		for (int j = 0; j < i; j++)
 		{
-			if (i > 0)
-				printf(" ");
-			printf("%d", positions[i]);
+			if (j > 0)
+				fprintf(stdout, " ");
+			fprintf(stdout, "%d", position[j]);
 		}
-		printf("\n");
+		fprintf(stdout, "\n");
 		return ;
 	}
-	for (int row = 0; row < n; row++)
+	for (int row = 0; row < i; row++)
 	{
-		if (is_safe(positions, col, row))
+		if (is_safe(position, row, col))
 		{
-			positions[col] = row;
-			solve(positions, col + 1, n);
+			position[col] = row;
+			solve(position, col + 1, i);
 		}
 	}
 }
-
-int	main(int ac, char **av)
+int	main(int ac, char **argv)
 {
-	if (ac == 2 && av[1][0] != '-')
-	{
-		int n = atoi(av[1]);
-		int *positions = malloc(sizeof(int) * n);
-		if (!positions)
-			return (1);
-		solve(positions, 0, n);
-		free(positions);
-	}
+	int	num;
+	int	*ptr;
+
+	if (ac != 2)
+		return (0);
+	num = atoi(argv[1]);
+	if (num == 0)
+		return (0);
+	if (num == 2 || num == 3)
+		return (1);
+	ptr = malloc(sizeof(int) * num);
+	if (!ptr)
+		return (1);
+	solve(ptr, 0, num);
+	free(ptr);
 	return (0);
 }
