@@ -1,0 +1,50 @@
+Nom de l’exercice : get_next_line
+Fichiers attendus : get_next_line.c, get_next_line.h
+Fonctions autorisées : read, free, malloc
+
+Tu dois écrire une fonction nommée get_next_line avec le prototype suivant :
+
+char *get_next_line(int fd);
+
+✅ Comportement attendu :
+
+    Ta fonction doit retourner une ligne qui a été lue depuis le descripteur de fichier donné en paramètre.
+
+    Une "ligne" est définie comme une succession de 0 à n caractères, se terminant soit par '\n', soit par la fin de fichier (EOF).
+
+    Si la ligne lue se termine par '\n', ce caractère doit être inclus dans la chaîne retournée.
+
+    Lorsque tu atteins l'EOF, tu dois retourner ce qui reste dans le buffer.
+
+        Si le buffer est vide → Tu dois retourner NULL.
+
+✅ En cas d’erreur :
+
+    Retourne NULL
+
+✅ Mémoire :
+
+    Si tu ne retournes pas NULL, le pointeur retourné doit pouvoir être free().
+
+    Lors de l’atteinte de l'EOF, ta fonction ne doit plus avoir aucune mémoire allouée dynamiquement, sauf pour la ligne retournée.
+
+    Ta fonction doit être sans fuite mémoire.
+
+✅ Utilisation du BUFFER_SIZE :
+
+    Ton programme sera compilé avec un -D BUFFER_SIZE=xx,
+    tu dois utiliser cette valeur comme taille du buffer pour les appels à read.
+
+✅ Appels successifs :
+
+    Appeler get_next_line en boucle doit permettre de lire tout le texte d’un fichier, ligne par ligne, quelle que soit la taille du fichier ou des lignes.
+
+    Ton code doit bien se comporter si tu lis depuis un fichier, le standard output, une redirection, etc.
+
+    Aucune autre fonction ne sera appelée sur le descripteur entre deux appels de get_next_line.
+
+❗ Important :
+
+    Le comportement de get_next_line sur un fichier binaire est indéfini.
+
+    Tu dois utiliser le test.sh fourni pour tester ta fonction.%             
