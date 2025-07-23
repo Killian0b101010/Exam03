@@ -2,56 +2,71 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	check_dup(char *str)
+int	ft_strlen(char *str)
 {
-	for (int i = 0; str[i]; i++)
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+int	ft_dup(char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (str[i])
 	{
-		for (int j = i + 1; str[j]; j++)
+		j = i + 1;
+		while (str[j])
 		{
 			if (str[i] == str[j])
 				return (1);
+			j++;
 		}
+		i++;
 	}
 	return (0);
 }
-
-int	ft_strlen(char *str)
+void	ft_sort(char *str)
 {
-	int	len;
+	int		i;
+	int		j;
+	char	temp;
 
-	len = 0;
-	while (str[len])
-		len++;
-	return (len);
-}
-
-void	sorted(char *str)
-{
-	char	tmp;
-
-	for (int i = 0; str[i]; i++)
+	i = 0;
+	j = 0;
+	while (str[i])
 	{
-		for (int j = i + 1; str[j]; j++)
+		j = i + 1;
+		while (str[j])
 		{
 			if (str[i] > str[j])
 			{
-				tmp = str[i];
+				temp = str[i];
 				str[i] = str[j];
-				str[j] = tmp;
+				str[j] = temp;
 			}
+			j++;
 		}
+		i++;
 	}
 }
-
 void	generate(char *str, char *result, int *used, int len, int depth)
 {
-	if (depth == len)
+	int	i;
+
+	if (len == depth)
 	{
 		write(1, result, len);
 		write(1, "\n", 1);
 		return ;
 	}
-	for (int i = 0; i < len; i++)
+	i = 0;
+	while (i < len)
 	{
 		if (!used[i])
 		{
@@ -60,21 +75,26 @@ void	generate(char *str, char *result, int *used, int len, int depth)
 			generate(str, result, used, len, depth + 1);
 			used[i] = 0;
 		}
+		i++;
 	}
 }
 
-int	main(int ac, char **av)
+int	main(int ac, char **argv)
 {
-	if (ac != 2 || check_dup(av[1]))
+	if (ac != 2 || ft_dup(argv[1]))
 		return (1);
-	int len = ft_strlen(av[1]);
-	char *result = malloc(len + 1);
-	int *used = calloc(len, sizeof(int));
-	if (!result || !used)
+
+	int *used;
+	char *result;
+
+	int len = ft_strlen(argv[1]);
+	used = calloc(len,sizeof(int));
+	result = malloc(sizeof(char) * len + 1);
+	if (!used || !result)
 		return (1);
-	sorted(av[1]);
-	generate(av[1], result, used, len, 0);
-	free(result);
+	ft_sort(argv[1]);
+	generate(argv[1], result, used, len, 0);
 	free(used);
+	free(result);
 	return (0);
 }
