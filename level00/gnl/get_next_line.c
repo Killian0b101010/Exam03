@@ -6,7 +6,7 @@
 /*   By: kiteixei <kiteixei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 00:31:46 by kiteixei          #+#    #+#             */
-/*   Updated: 2025/07/19 00:31:47 by kiteixei         ###   ########.fr       */
+/*   Updated: 2025/07/21 22:23:53 by kiteixei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,12 @@ char	*ft_strdup(char *src)
 
 char	*get_next_line(int fd)
 {
-	static int	buffer_pos;
-	static int	buffer_read;
+	static int	buffer_pos = 0;
+	static int	buffer_read = 0;
 	static char	buffer[BUFFER_SIZE];
 	char		line[10000];
 	int			i;
 
-	buffer_pos = 0;
-	buffer_read = 0;
 	i = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
